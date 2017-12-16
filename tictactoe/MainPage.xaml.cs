@@ -66,17 +66,6 @@ namespace TicTacToe
             }
         }
 
-        public void checkForWin(int size)
-        {
-            for (int x = 0; x < size; x++) { }
-        }
-
-        public Boolean checkLine(int start)
-        {
-            // check ho
-            return false;
-        }
-
         #region CHECK FOR 3 IN A ROW
         public void winner()
         {   //START OF X
