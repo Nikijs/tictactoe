@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using Windows.UI.Text;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -26,11 +27,13 @@ namespace TicTacToe
     public sealed partial class MainPage : Page
     {
         #region Global Variables _rows is essential, don't delete it
-        int _rows;
+        int _rows = 3; //no of rows
+        int xWins = 0; //count wins for each player
+        int oWins = 0;
         const int _iHeight = 100;
         int _iWidth = 100;
-        int count = 0;
-        String storedArray;
+        int count = 0; 
+        int win;
         Boolean turn = true;
         #endregion
 
@@ -41,17 +44,17 @@ namespace TicTacToe
         }
         #endregion
 
-        Button[] buttonArray;
+        
         int a, b;
-
-        private void setupThePieces()
+        Button[] buttonArray = new Button[10];
+        private void setupTheButtons()
         {
-            int x = 0;
+            int x = 0; //increment each button 
+            //adding 3x3 button array (9buttons) each having a tapped event also 3 rows and 3 cols
             for (a = 0; a < _rows; a++)
             {
                 for (b = 0; b < _rows; b++)
                 {
-
                     buttonArray[x] = new Button();
                     buttonArray[x].Height = 90;
                     buttonArray[x].Width = 90;
@@ -65,7 +68,29 @@ namespace TicTacToe
                 }
             }
         }
-
+        public void finish()
+        {
+            if (count >= 9)
+            {text.Text = "Game Over\nNo Winner";} //if all 9 buttons pressed no winner
+            if (win == 1) //if winner was X
+            {
+                text.Text = "Player X wins";
+                xWins++;
+                wins.Text = " X=" + xWins + "    O=" + oWins;
+                for (int z = 0; z < _rows * _rows; z++){ //makes sure to disable all the buttons when gameover
+                    buttonArray[z].IsEnabled = false;
+                }
+            }
+            if (win == 2) //if winner was O
+            {
+                text.Text = "Player O wins";
+                oWins++;
+                wins.Text = " X=" + xWins + "    O=" + oWins;
+                for (int z = 0; z < _rows * _rows; z++){
+                    buttonArray[z].IsEnabled = false;
+                }
+            }
+        }
         #region CHECK FOR 3 IN A ROW
         public void winner()
         {   //START OF X
@@ -74,48 +99,56 @@ namespace TicTacToe
                 buttonArray[0].Content = "-";
                 buttonArray[1].Content = "-";
                 buttonArray[2].Content = "-";
+                win = 1;
             }
             else if ((string)buttonArray[3].Content == "X" && (string)buttonArray[4].Content == "X" && (string)buttonArray[5].Content == "X")
             {
                 buttonArray[3].Content = "-";
                 buttonArray[4].Content = "-";
                 buttonArray[5].Content = "-";
+                win = 1;
             }
             else if ((string)buttonArray[6].Content == "X" && (string)buttonArray[7].Content == "X" && (string)buttonArray[8].Content == "X")
             {
                 buttonArray[6].Content = "-";
                 buttonArray[7].Content = "-";
                 buttonArray[8].Content = "-";
+                win = 1;
             }
             else if ((string)buttonArray[0].Content == "X" && (string)buttonArray[3].Content == "X" && (string)buttonArray[6].Content == "X")
             {
                 buttonArray[0].Content = "|";
                 buttonArray[3].Content = "|";
                 buttonArray[6].Content = "|";
+                win = 1;
             }
             else if ((string)buttonArray[1].Content == "X" && (string)buttonArray[4].Content == "X" && (string)buttonArray[7].Content == "X")
             {
                 buttonArray[1].Content = "|";
                 buttonArray[4].Content = "|";
                 buttonArray[7].Content = "|";
+                win = 1;
             }
             else if ((string)buttonArray[2].Content == "X" && (string)buttonArray[5].Content == "X" && (string)buttonArray[8].Content == "X")
             {
                 buttonArray[2].Content = "|";
                 buttonArray[5].Content = "|";
                 buttonArray[8].Content = "|";
+                win = 1;
             }
             else if ((string)buttonArray[0].Content == "X" && (string)buttonArray[4].Content == "X" && (string)buttonArray[8].Content == "X")
             {
                 buttonArray[0].Content = "\\";
                 buttonArray[4].Content = "\\";
                 buttonArray[8].Content = "\\";
+                win = 1;
             }
             else if ((string)buttonArray[2].Content == "X" && (string)buttonArray[4].Content == "X" && (string)buttonArray[6].Content == "X")
             {
                 buttonArray[2].Content = "/";
                 buttonArray[4].Content = "/";
                 buttonArray[6].Content = "/";
+                win = 1;
             }
             //START OF O
 
@@ -124,55 +157,62 @@ namespace TicTacToe
                 buttonArray[0].Content = "-";
                 buttonArray[1].Content = "-";
                 buttonArray[2].Content = "-";
-
+                win = 2;
             }
             else if ((string)buttonArray[3].Content == "O" && (string)buttonArray[4].Content == "O" && (string)buttonArray[5].Content == "O")
             {
                 buttonArray[3].Content = "-";
                 buttonArray[4].Content = "-";
                 buttonArray[5].Content = "-";
+                win = 2;
             }
             else if ((string)buttonArray[6].Content == "O" && (string)buttonArray[7].Content == "O" && (string)buttonArray[8].Content == "O")
             {
                 buttonArray[6].Content = "-";
                 buttonArray[7].Content = "-";
                 buttonArray[8].Content = "-";
+                win = 2;
             }
             else if ((string)buttonArray[0].Content == "O" && (string)buttonArray[3].Content == "O" && (string)buttonArray[6].Content == "O")
             {
                 buttonArray[0].Content = "|";
                 buttonArray[3].Content = "|";
                 buttonArray[6].Content = "|";
+                win = 2;
             }
             else if ((string)buttonArray[1].Content == "O" && (string)buttonArray[4].Content == "O" && (string)buttonArray[7].Content == "O")
             {
                 buttonArray[1].Content = "|";
                 buttonArray[4].Content = "|";
                 buttonArray[7].Content = "|";
+                win = 2;
             }
             else if ((string)buttonArray[2].Content == "O" && (string)buttonArray[5].Content == "O" && (string)buttonArray[8].Content == "O")
             {
                 buttonArray[2].Content = "|";
                 buttonArray[5].Content = "|";
                 buttonArray[8].Content = "|";
+                win = 2;
             }
             else if ((string)buttonArray[0].Content == "O" && (string)buttonArray[4].Content == "O" && (string)buttonArray[8].Content == "O")
             {
                 buttonArray[0].Content = "\\";
                 buttonArray[4].Content = "\\";
                 buttonArray[8].Content = "\\";
+                win = 2;
             }
             else if ((string)buttonArray[2].Content == "O" && (string)buttonArray[4].Content == "O" && (string)buttonArray[6].Content == "O")
             {
                 buttonArray[2].Content = "/";
                 buttonArray[4].Content = "/";
                 buttonArray[6].Content = "/";
+                win = 2;
             }
         }
         #endregion
 
         TextBlock text;
-        public void turnNotfier()
+        public void turnNotfier() //textblock to show player turn
         {
             this.text = new TextBlock();
             text.Name = "textBox";
@@ -181,68 +221,56 @@ namespace TicTacToe
             text.Width = 250;
             text.Height = 150;
             text.FontSize = 30;
-            text.Foreground = new SolidColorBrush(Colors.GreenYellow);
+            text.FontWeight = FontWeights.Bold;
+            text.FontFamily = new FontFamily("Century Gothic");
+            text.Foreground = new SolidColorBrush(Colors.PaleVioletRed);
             if (turn == true)
-            {
+            {  
                 text.Text = "Player X turn";
+                finish();   
             }
             else if (turn == false)
-            {
+            {  
                 text.Text = "Player O turn";
+                finish();
             }
-
             rootGrid.Children.Add(text);
-
         }
-
+        //button tapped for each button 
+        //the boolean true = x turn false = o turn
+        //will change the content of button and disable it/calls turn nofifier
         private void Button1_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var current = sender as Button;
-
-            if ((_rows * _rows) > (count))
-            {
                 if (turn == true)
                 {
                     current.Content = "X";
-                    current.Background = new SolidColorBrush(Colors.Red);
                     current.FontSize = 50;
                     count++;
                     this.turn = false;
                     winner();
-                    if ((_rows * _rows) > (count))
-                    {
-                        text.Text = "";
-                        turnNotfier();
+                    current.IsEnabled = false;
+                text.Text = "";
+                turnNotfier(); 
+            }
 
-                    }
-                    else { text.Text = "Game over"; }
-
-
-                }
                 else if (turn == false)
                 {
                     current.Content = "O";
-                    this.turn = true;
+                text.Text = "";
+                this.turn = true;
                     current.FontSize = 50;
-                    current.Background = new SolidColorBrush(Colors.Red);
                     count++;
                     winner();
-                    if ((_rows * _rows) > (count))
-                    {
-                        text.Text = "";
-                        turnNotfier();
-                    }
-                    else { text.Text = "Game over"; }
-
+                    current.IsEnabled = false;
+                    turnNotfier();
+                
                 }
-
-                current.IsEnabled = false;
-            }
-
         }
 
         Grid grdBoard;
         Button backButton;
+        //creates the grid and back button
         private void createBoard()
         {
             //back button
@@ -303,31 +331,26 @@ namespace TicTacToe
                 }
             }
         }
-
+        //start button
         private void tap1(object sender, TappedRoutedEventArgs e)
         {
             Button but = (Button)sender;
             turnNotfier();
             createBoard();
-            setupThePieces();
-            spRadioButtons.Visibility = Visibility.Collapsed;
-
-
+            setupTheButtons();
+           
         }
+        //backbutton
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            spRadioButtons.Visibility = Visibility.Visible;
             rootGrid.Children.Remove(FindName("Board") as Grid);
             backButton.Visibility = Visibility.Collapsed;
             startButton.Visibility = Visibility.Visible;
             rootGrid.Children.Remove(FindName("textBox") as TextBlock);
             count = 0;
+            text.Visibility = Visibility.Collapsed;
+            win = 0;
         }
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioButton current = (RadioButton)sender;
-            _rows = Convert.ToInt32(current.Tag);
-            buttonArray = new Button[_rows * _rows];
-        }
+      
     }
 }
